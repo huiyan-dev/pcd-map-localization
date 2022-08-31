@@ -1,6 +1,5 @@
 pcd_map_localization:
-  # If loadPCD is true which just read global map in your given path or false subscrible from rosbag Topic. 
-  loadPCD: true                              # https://github.com/TixiaoShan/LIO-SAM/issues/3
+  # LoadPCD is true which just read global map in your given path or false subscrible from rosbag Topic. 
   toRosBag: true                               # if true save message to rosbag
   savedPCDDirectory: "/Datasets/PCDMap/"        # start at your home folder: /home/${user}/, starts and ends with "/".
   savedCornerMapDirectory: "corner/" # savePCDDirectory + saveCornerMapDirectory, start ""

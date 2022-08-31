@@ -27,7 +27,6 @@ public:
     nh_.param<std::string>("pcd_map_localization/gtTransformationsTopic", global_gt_transformations_topic, "global_map/gt_transformations");
 
     // load map info and flag
-    nh_.param<bool>("pcd_map_localization/loadPCD", load_PCD, "global_map/corner");
     nh_.param<bool>("pcd_map_localization/toRosBag", to_rosbag, true);
     nh_.param<std::string>("pcd_map_localization/savedPCDDirectory", saved_PCD_directory, "/Datasets/PCDMap/");
     nh_.param<std::string>("pcd_map_localization/savedCornerMapDirectory", saved_corner_map_directory, "corner/");
@@ -37,10 +36,9 @@ public:
     nh_.param<std::string>("pcd_map_localization/robotCoordinateName", robot_coordinate_name, "robot");
     nh_.param<std::string>("pcd_map_localization/lidarCoordinateName", lidar_coordinate_name, "lidar");
     
+    usleep(100);
   }
 
-  ~ParamServer() {}
-  
   ros::NodeHandle nh_;
   std::string global_corner_splits_topic;
   std::string global_surf_splits_topic;
@@ -50,8 +48,7 @@ public:
   std::string global_gt_trajectory_topic;
   std::string global_gt_transformations_topic;
 
-  // Save pcd, eg : trajectory, corner map
-  bool load_PCD;
+  // Saved pcd, eg : trajectory, corner map
   bool to_rosbag;
   std::string saved_PCD_directory;
   std::string saved_corner_map_directory;

@@ -25,7 +25,6 @@ public:
 
     allocateMemory();
     
-    ROS_INFO_STREAM("loadPCD : " << (load_PCD ? "true" : "false"));
     ROS_INFO_STREAM("savedPCDDirectory : " << saved_PCD_directory);
     ROS_INFO("Loading global pcd map ...");
     
@@ -169,6 +168,6 @@ int main(int argc, char **argv){
   }
   bag_out.close();
   std::cout << "Load pcd map done. \n";
-  ros::spin();
+  // ros::spin();
   return 0;
 }
