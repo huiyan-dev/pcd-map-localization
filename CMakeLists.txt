@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(lio_sam_map_localization)
+project(pcd_map_localization)
 
 set(CMAKE_BUILD_TYPE "Release")
 set(CMAKE_CXX_FLAGS "-std=c++14")
@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
   std_msgs
+  rosbag
 )
 
 ## System dependencies are found with CMake's conventions
@@ -67,6 +68,14 @@ link_directories(
 	include
 	${PCL_LIBRARY_DIRS}
 )
+################################################
+## Declare lio_sam_map_localization nodes     ##
+################################################
+
+add_executable(${PROJECT_NAME}_mapHelper src/map_helper.cc)
+target_link_libraries(${PROJECT_NAME}_mapHelper ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+target_include_directories(${PROJECT_NAME}_mapHelper PRIVATE ${PROJECT_SOURCE_DIR}/include ${catkin_INCLUDE_DIRS})
+
 #############
 ## Install ##
 #############

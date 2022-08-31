@@ -1,0 +1,30 @@
+pcd_map_localization:
+  # If loadPCD is true which just read global map in your given path or false subscrible from rosbag Topic. 
+  loadPCD: true                              # https://github.com/TixiaoShan/LIO-SAM/issues/3
+  toRosBag: true                               # if true save message to rosbag
+  savedPCDDirectory: "/Datasets/PCDMap/"        # start at your home folder: /home/${user}/, starts and ends with "/".
+  savedCornerMapDirectory: "corner/" # savePCDDirectory + saveCornerMapDirectory, start ""
+  savedSurfMapDirectory: "surf/" # savePCDDirectory + saveSurfrMapDirectory, start ""
+  
+  # If loadPCD is false than subscrible these topics to load priority map.
+  # NOTE: This .pcd format map can generate by lio_sam or others methods.
+  #       Localization based on a priority map means we daopt global map as absolute reference.
+  #       Ground truth (GT) of trajectory and transform also generate by lio_sam algorithm, also support others.
+  #       About the detailed format of these topics message please click https://github.com/mosthuiyan/lio_sam_map_localization
+  globalCornerSplitsTopic: "global_map/corner_splits"
+  globalSurfSplitsTopic: "global_map/surf_splits"
+  globalCornerMapTopic: "global_map/corner"
+  globalSurfMapTopic: "global_map/surf"
+  globalMapTopic: "global_map/global"
+  gtTrajectoryTopic: "global_map/gt_trajectory"
+  gtTransformationsTopic: "global_map/gt_transformations"
+
+  # Coordinate name in ros
+  worldCoordinateName: "world"
+  robotCoordinateName: "robot"
+  lidarCoordinateName: "lidar"
+
+  # NOTE: this initial pose is provided by God perspective
+  robotInitPose: [1.0, 0.0, 0.0
+                  0.0, 1.0, 0.0,
+                  0.0, 0.0, 1.0]

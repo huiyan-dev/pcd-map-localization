@@ -1,0 +1,14 @@
+<launch>
+
+    <arg name="project" default="pcd_map_localization"/>
+    
+    <!-- Parameters -->
+    <rosparam file="$(find pcd_map_localization)/config/params.yaml" command="load" />
+
+    <!-- Run Map Loader -->
+    <include file="$(find pcd_map_localization)/launch/include/module_localization.launch" />
+
+    <!-- Run Rviz-->
+    <include file="$(find pcd_map_localization)/launch/include/module_rviz.launch" />
+
+</launch>
