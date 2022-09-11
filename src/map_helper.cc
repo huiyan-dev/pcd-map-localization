@@ -170,7 +170,7 @@ int main(int argc, char **argv){
     if(iter < (int)corner_splits.size()) {
       LoadPCDFromLocal(corner_splits[iter].c_str(), *corner_split_temp);
       LoadPCDFromLocal(surf_splits[iter].c_str(), *surf_split_temp);
-      
+      header.frame_id = map_helper.world_coordinate_name;
       if(!map_helper.to_rosbag) {
         PublishPointCloud2(map_helper.global_corner_splits_pub, *corner_split_temp, header);
         PublishPointCloud2(map_helper.global_surf_splits_pub, *surf_split_temp, header);
@@ -179,14 +179,14 @@ int main(int argc, char **argv){
         PublishPointCloud2(map_helper.global_surf_splits_pub, *surf_split_temp, header, map_helper.global_surf_splits_topic, bag_out);
       }
     }
-    // input lidar data for map localization
+    // input lidar data for odometry map localization
+    header.frame_id = map_helper.odometery_coordinate_name;
     LoadPCDFromLocal(deskewed_pointclouds[iter].c_str(), *deskewed_pointcloud_temp);
     if(!map_helper.to_rosbag) {
       PublishPointCloud2(map_helper.deskewed_pointcloud_pub, *deskewed_pointcloud_temp, header);
     } else {
       PublishPointCloud2(map_helper.deskewed_pointcloud_pub, *deskewed_pointcloud_temp, header, map_helper.deskewed_pointclouds_topic, bag_out);
     }
-
     iter++;
     pub_rate.sleep();
   }

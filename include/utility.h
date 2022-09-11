@@ -37,6 +37,7 @@ public:
     nh.param<std::string>("pcd_map_localization/worldCoordinateName", world_coordinate_name, "world");
     nh.param<std::string>("pcd_map_localization/robotCoordinateName", robot_coordinate_name, "robot");
     nh.param<std::string>("pcd_map_localization/lidarCoordinateName", lidar_coordinate_name, "lidar");
+    nh.param<std::string>("pcd_map_localization/odometeryCoordinateName", odometery_coordinate_name, "odometery");
 
     usleep(100);
   }
@@ -62,6 +63,7 @@ public:
   std::string world_coordinate_name;
   std::string robot_coordinate_name;
   std::string lidar_coordinate_name;
+  std::string odometery_coordinate_name;
 };
 
 template<typename PointT>

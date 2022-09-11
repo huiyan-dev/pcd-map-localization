@@ -24,6 +24,7 @@ pcd_map_localization:
   worldCoordinateName: "world"
   robotCoordinateName: "robot"
   lidarCoordinateName: "lidar"
+  odometeryCoordinateName: "odometery"
 
   # NOTE: this initial pose is provided by God perspective
   robotInitPose: [1.0, 0.0, 0.0
