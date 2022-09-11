@@ -5,7 +5,13 @@
     <!-- Parameters -->
     <rosparam file="$(find pcd_map_localization)/config/params.yaml" command="load" />
 
+    <!-- Run Map Localizing-->
+    <include file="$(find pcd_map_localization)/launch/include/module_localizing.launch" />
+
     <!-- Run Rviz-->
     <include file="$(find pcd_map_localization)/launch/include/module_rviz.launch" />
+
+    <!-- Run Data Center-->
+    <!-- <include file="$(find pcd_map_localization)/launch/include/module_localization.launch" /> -->
 
 </launch>

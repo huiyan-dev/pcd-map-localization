@@ -23,7 +23,7 @@ class GlobalPCDMapHelper : public ParamServer {
 public:
   GlobalPCDMapHelper() {
 
-    allocateMemory();
+    allocate_memory();
     
     ROS_INFO_STREAM("savedPCDDirectory : " << saved_PCD_directory);
     ROS_INFO("Loading global pcd map ...");
@@ -71,23 +71,31 @@ public:
         global_surf_splits.push_back(dit->path().string());
       }
     }
+    // Splits of global surf feature map
+    ss.clear(), ss.str("");
+    ss << str_HOME << saved_PCD_directory << saved_deskewed_pointclouds_directory;
+    for(boost::filesystem::directory_iterator dit(ss.str()); dit != endDit; ++dit) {
+      if(dit->path().extension() == ".pcd") {
+        deskewed_pointclouds.push_back(dit->path().string());
+      }
+    }
     ROS_ASSERT(global_corner_splits.size() == global_surf_splits.size());
     sort(global_corner_splits.begin(), global_corner_splits.end());
     sort(global_surf_splits.begin(), global_surf_splits.end());
+    sort(deskewed_pointclouds.begin(), deskewed_pointclouds.end());
 
-    global_corner_splits_pub = nh_.advertise<sensor_msgs::PointCloud2>(global_corner_splits_topic, 10);
-    global_surf_splits_pub = nh_.advertise<sensor_msgs::PointCloud2>(global_surf_splits_topic, 10);
-    global_corner_map_pub = nh_.advertise<sensor_msgs::PointCloud2>(global_corner_map_topic, 1);
-    global_surf_map_pub = nh_.advertise<sensor_msgs::PointCloud2>(global_surf_map_topic, 1);
-    global_map_pub = nh_.advertise<sensor_msgs::PointCloud2>(global_map_topic, 1);
-    global_gt_trajectory_pub = nh_.advertise<sensor_msgs::PointCloud2>(global_gt_trajectory_topic, 1);
-    global_gt_transforms_pub = nh_.advertise<sensor_msgs::PointCloud2>(global_gt_transformations_topic, 1);
+    global_corner_splits_pub = nh.advertise<sensor_msgs::PointCloud2>(global_corner_splits_topic, 10);
+    global_surf_splits_pub = nh.advertise<sensor_msgs::PointCloud2>(global_surf_splits_topic, 10);
+    global_corner_map_pub = nh.advertise<sensor_msgs::PointCloud2>(global_corner_map_topic, 1);
+    global_surf_map_pub = nh.advertise<sensor_msgs::PointCloud2>(global_surf_map_topic, 1);
+    global_map_pub = nh.advertise<sensor_msgs::PointCloud2>(global_map_topic, 1);
+    global_gt_trajectory_pub = nh.advertise<sensor_msgs::PointCloud2>(global_gt_trajectory_topic, 1);
+    global_gt_transforms_pub = nh.advertise<sensor_msgs::PointCloud2>(global_gt_transformations_topic, 1);
+    deskewed_pointcloud_pub = nh.advertise<sensor_msgs::PointCloud2>(deskewed_pointclouds_topic, 10);
+  }
+  ~GlobalPCDMapHelper()= default;
 
-  }
-  ~GlobalPCDMapHelper() {
-    
-  }
-  void allocateMemory() {
+  void allocate_memory() {
     global_surf_map.reset(new pcl::PointCloud<PointType>());
     global_corner_map.reset(new pcl::PointCloud<PointType>());
     global_map.reset(new pcl::PointCloud<PointType>());
@@ -97,6 +105,7 @@ public:
   string str_HOME;
   vector<string> global_corner_splits;
   vector<string> global_surf_splits;
+  vector<string> deskewed_pointclouds;
   pcl::PointCloud<PointType>::Ptr global_corner_map;
   pcl::PointCloud<PointType>::Ptr global_surf_map;
   pcl::PointCloud<PointType>::Ptr global_map;
@@ -111,6 +120,8 @@ public:
   ros::Publisher global_map_pub;
   ros::Publisher global_gt_trajectory_pub;
   ros::Publisher global_gt_transforms_pub;
+
+  ros::Publisher deskewed_pointcloud_pub;
 };
 int main(int argc, char **argv){
   ros::init(argc, argv, "map_locallization");
@@ -146,23 +157,36 @@ int main(int argc, char **argv){
   ros::Rate pub_rate(10);
   const vector<string> &corner_splits = map_helper.global_corner_splits;
   const vector<string> &surf_splits = map_helper.global_surf_splits;
+  const vector<string> &deskewed_pointclouds = map_helper.deskewed_pointclouds;
+  
   int iter = 0;
   pcl::PointCloud<PointType>::Ptr corner_split_temp(new pcl::PointCloud<PointType>());
   pcl::PointCloud<PointType>::Ptr surf_split_temp(new pcl::PointCloud<PointType>());
+  pcl::PointCloud<PointType>::Ptr deskewed_pointcloud_temp(new pcl::PointCloud<PointType>());
 
-  while(iter < (int)corner_splits.size() && ros::ok()) {
-    LoadPCDFromLocal(corner_splits[iter].c_str(), *corner_split_temp);
-    LoadPCDFromLocal(surf_splits[iter].c_str(), *surf_split_temp);
-    
+  while(iter < (int)deskewed_pointclouds.size() && ros::ok()) {
     header.stamp = ros::Time::now();
-    if(!map_helper.to_rosbag) {
-      PublishPointCloud2(map_helper.global_corner_splits_pub, *corner_split_temp, header);
-      PublishPointCloud2(map_helper.global_surf_splits_pub, *surf_split_temp, header);
-    } else {
-      PublishPointCloud2(map_helper.global_corner_splits_pub, *corner_split_temp, header, map_helper.global_corner_splits_topic, bag_out);
-      PublishPointCloud2(map_helper.global_surf_splits_pub, *surf_split_temp, header, map_helper.global_surf_splits_topic, bag_out);
+    // corner_splits and surf_splits, lost timestamp infomation of them in the current compare to lio_sam.
+    if(iter < (int)corner_splits.size()) {
+      LoadPCDFromLocal(corner_splits[iter].c_str(), *corner_split_temp);
+      LoadPCDFromLocal(surf_splits[iter].c_str(), *surf_split_temp);
+      
+      if(!map_helper.to_rosbag) {
+        PublishPointCloud2(map_helper.global_corner_splits_pub, *corner_split_temp, header);
+        PublishPointCloud2(map_helper.global_surf_splits_pub, *surf_split_temp, header);
+      } else {
+        PublishPointCloud2(map_helper.global_corner_splits_pub, *corner_split_temp, header, map_helper.global_corner_splits_topic, bag_out);
+        PublishPointCloud2(map_helper.global_surf_splits_pub, *surf_split_temp, header, map_helper.global_surf_splits_topic, bag_out);
+      }
     }
-    
+    // input lidar data for map localization
+    LoadPCDFromLocal(deskewed_pointclouds[iter].c_str(), *deskewed_pointcloud_temp);
+    if(!map_helper.to_rosbag) {
+      PublishPointCloud2(map_helper.deskewed_pointcloud_pub, *deskewed_pointcloud_temp, header);
+    } else {
+      PublishPointCloud2(map_helper.deskewed_pointcloud_pub, *deskewed_pointcloud_temp, header, map_helper.deskewed_pointclouds_topic, bag_out);
+    }
+
     iter++;
     pub_rate.sleep();
   }

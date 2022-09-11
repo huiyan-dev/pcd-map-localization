@@ -1,9 +1,10 @@
 pcd_map_localization:
   # LoadPCD is true which just read global map in your given path or false subscrible from rosbag Topic. 
   toRosBag: true                               # if true save message to rosbag
-  savedPCDDirectory: "/Datasets/PCDMap/"        # start at your home folder: /home/${user}/, starts and ends with "/".
+  savedPCDDirectory: "/Datasets/PCDMap/lio_sam/"        # start at your home folder: /home/${user}/, starts and ends with "/".
   savedCornerMapDirectory: "corner/" # savePCDDirectory + saveCornerMapDirectory, start ""
   savedSurfMapDirectory: "surf/" # savePCDDirectory + saveSurfrMapDirectory, start ""
+  savedDeskewedPointcloudDirectory: "input_data/" # savePCDDirectory + saveSurfrMapDirectory, start ""
   
   # If loadPCD is false than subscrible these topics to load priority map.
   # NOTE: This .pcd format map can generate by lio_sam or others methods.
@@ -17,6 +18,7 @@ pcd_map_localization:
   globalMapTopic: "global_map/global"
   gtTrajectoryTopic: "global_map/gt_trajectory"
   gtTransformationsTopic: "global_map/gt_transformations"
+  deskewedPointcloudTopic: "input/deskewed_pointcloud"
 
   # Coordinate name in ros
   worldCoordinateName: "world"
