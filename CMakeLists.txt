@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   rosbag
+  tf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -75,6 +76,10 @@ link_directories(
 add_executable(${PROJECT_NAME}_mapHelper src/map_helper.cc)
 target_link_libraries(${PROJECT_NAME}_mapHelper ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 target_include_directories(${PROJECT_NAME}_mapHelper PRIVATE ${PROJECT_SOURCE_DIR}/include ${catkin_INCLUDE_DIRS})
+
+add_executable(${PROJECT_NAME}_mapLocalizing src/map_localizing.cc)
+target_link_libraries(${PROJECT_NAME}_mapLocalizing ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+target_include_directories(${PROJECT_NAME}_mapLocalizing PRIVATE ${PROJECT_SOURCE_DIR}/include ${catkin_INCLUDE_DIRS})
 
 #############
 ## Install ##

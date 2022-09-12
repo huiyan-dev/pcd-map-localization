@@ -18,28 +18,31 @@ namespace MapLocalization {
 class ParamServer {
 public:
   ParamServer() {
-    nh_.param<std::string>("pcd_map_localization/globalCornerSplitsTopic", global_corner_splits_topic, "global_map/corner_splits");
-    nh_.param<std::string>("pcd_map_localization/globalSurfSplitsTopic", global_surf_splits_topic, "global_map/surf_splits");
-    nh_.param<std::string>("pcd_map_localization/globalCornerMapTopic", global_corner_map_topic, "global_map/corner");
-    nh_.param<std::string>("pcd_map_localization/globalSurfMapTopic", global_surf_map_topic, "global_map/surf");
-    nh_.param<std::string>("pcd_map_localization/globalMapTopic", global_map_topic, "global_map/global");
-    nh_.param<std::string>("pcd_map_localization/gtTrajectoryTopic", global_gt_trajectory_topic, "global_map/gt_trajectory");
-    nh_.param<std::string>("pcd_map_localization/gtTransformationsTopic", global_gt_transformations_topic, "global_map/gt_transformations");
+    nh.param<std::string>("pcd_map_localization/globalCornerSplitsTopic", global_corner_splits_topic, "global_map/corner_splits");
+    nh.param<std::string>("pcd_map_localization/globalSurfSplitsTopic", global_surf_splits_topic, "global_map/surf_splits");
+    nh.param<std::string>("pcd_map_localization/globalCornerMapTopic", global_corner_map_topic, "global_map/corner");
+    nh.param<std::string>("pcd_map_localization/globalSurfMapTopic", global_surf_map_topic, "global_map/surf");
+    nh.param<std::string>("pcd_map_localization/globalMapTopic", global_map_topic, "global_map/global");
+    nh.param<std::string>("pcd_map_localization/gtTrajectoryTopic", global_gt_trajectory_topic, "global_map/gt_trajectory");
+    nh.param<std::string>("pcd_map_localization/gtTransformationsTopic", global_gt_transformations_topic, "global_map/gt_transformations");
+    nh.param<std::string>("pcd_map_localization/deskewedPointcloudTopic", deskewed_pointclouds_topic, "input/deskewed_pointcloud");
 
     // load map info and flag
-    nh_.param<bool>("pcd_map_localization/toRosBag", to_rosbag, true);
-    nh_.param<std::string>("pcd_map_localization/savedPCDDirectory", saved_PCD_directory, "/Datasets/PCDMap/");
-    nh_.param<std::string>("pcd_map_localization/savedCornerMapDirectory", saved_corner_map_directory, "corner/");
-    nh_.param<std::string>("pcd_map_localization/savedSurfMapDirectory", saved_surf_map_directory, "surf/");
+    nh.param<bool>("pcd_map_localization/toRosBag", to_rosbag, true);
+    nh.param<std::string>("pcd_map_localization/savedPCDDirectory", saved_PCD_directory, "/Datasets/PCDMap/");
+    nh.param<std::string>("pcd_map_localization/savedCornerMapDirectory", saved_corner_map_directory, "corner/");
+    nh.param<std::string>("pcd_map_localization/savedSurfMapDirectory", saved_surf_map_directory, "surf/");
+    nh.param<std::string>("pcd_map_localization/savedDeskewedPointcloudDirectory", saved_deskewed_pointclouds_directory, "input_data/");
 
-    nh_.param<std::string>("pcd_map_localization/worldCoordinateName", world_coordinate_name, "world");
-    nh_.param<std::string>("pcd_map_localization/robotCoordinateName", robot_coordinate_name, "robot");
-    nh_.param<std::string>("pcd_map_localization/lidarCoordinateName", lidar_coordinate_name, "lidar");
-    
+    nh.param<std::string>("pcd_map_localization/worldCoordinateName", world_coordinate_name, "world");
+    nh.param<std::string>("pcd_map_localization/robotCoordinateName", robot_coordinate_name, "robot");
+    nh.param<std::string>("pcd_map_localization/lidarCoordinateName", lidar_coordinate_name, "lidar");
+    nh.param<std::string>("pcd_map_localization/odometeryCoordinateName", odometery_coordinate_name, "odometery");
+
     usleep(100);
   }
 
-  ros::NodeHandle nh_;
+  ros::NodeHandle nh;
   std::string global_corner_splits_topic;
   std::string global_surf_splits_topic;
   std::string global_corner_map_topic;
@@ -47,17 +50,20 @@ public:
   std::string global_map_topic;
   std::string global_gt_trajectory_topic;
   std::string global_gt_transformations_topic;
+  std::string deskewed_pointclouds_topic;
 
   // Saved pcd, eg : trajectory, corner map
   bool to_rosbag;
   std::string saved_PCD_directory;
   std::string saved_corner_map_directory;
   std::string saved_surf_map_directory;
+  std::string saved_deskewed_pointclouds_directory;
 
   // ROS Frames name
   std::string world_coordinate_name;
   std::string robot_coordinate_name;
   std::string lidar_coordinate_name;
+  std::string odometery_coordinate_name;
 };
 
 template<typename PointT>

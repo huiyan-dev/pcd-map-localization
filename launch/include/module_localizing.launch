@@ -1,0 +1,8 @@
+<launch>
+
+    <arg name="project" default="pcd_map_localization"/>
+
+    <!--- Run Map Loader-->
+    <node pkg="$(arg project)" type="$(arg project)_mapLocalizing" name="$(arg project)_mapLocalizing" output="screen" 	respawn="true" />
+
+</launch>
