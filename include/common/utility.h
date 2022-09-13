@@ -1,5 +1,5 @@
-#ifndef MAP_LOCALIZATION_UTILITY_H
-#define MAP_LOCALIZATION_UTILITY_H
+#ifndef MAP_LOCALIZATION_COMMON_UTILITY_H
+#define MAP_LOCALIZATION_COMMON_UTILITY_H
 
 #include "types.h"
 
@@ -18,6 +18,13 @@ namespace MapLocalization {
 class ParamServer {
 public:
   ParamServer() {
+    nh.param<float>("pcd_map_localization/localizingGlobalMapLeafSize", localizing_global_map_ds_leaf_size, 4.0);
+    nh.param<float>("pcd_map_localization/localizingDeskewedLeafSize", localizing_deskewed_leaf_size, 2.0);
+    nh.param<double>("pcd_map_localization/globalMapDsSearchRadius", global_map_ds_search_radius, 50);
+    nh.param<float>("pcd_map_localization/ndtResolution", ndt_resolution, 20);
+    nh.param<float>("pcd_map_localization/ndtMaxIterations", ndt_max_iterations, 100);
+    nh.param<float>("pcd_map_localization/ndtRotationEpsilon", ndt_rotation_epsilon, 0.01);
+
     nh.param<std::string>("pcd_map_localization/globalCornerSplitsTopic", global_corner_splits_topic, "global_map/corner_splits");
     nh.param<std::string>("pcd_map_localization/globalSurfSplitsTopic", global_surf_splits_topic, "global_map/surf_splits");
     nh.param<std::string>("pcd_map_localization/globalCornerMapTopic", global_corner_map_topic, "global_map/corner");
@@ -41,6 +48,12 @@ public:
 
     usleep(100);
   }
+  float localizing_global_map_ds_leaf_size;
+  float localizing_deskewed_leaf_size;
+  double global_map_ds_search_radius;
+  float ndt_resolution;
+  float ndt_max_iterations;
+  float ndt_rotation_epsilon;
 
   ros::NodeHandle nh;
   std::string global_corner_splits_topic;
@@ -97,5 +110,28 @@ inline void PublishPointCloud2(const ros::Publisher pub,
   pub.publish(msg);
   bag_out.write(topic, header.stamp, msg);
 }
+
+class TimeHelper {
+public:
+    /**
+     * @brief Get current system timestamp in ms.
+     * @return  current timestamp in ms.
+     */
+    static int64_t now_ms() {
+      int64_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(
+          std::chrono::system_clock::now().time_since_epoch()).count();
+      return e1;
+    }
+
+    /**
+     * @brief Get current system timestamp in us.
+     * @return  current timestamp in us.
+     */
+    static int64_t now_us() {
+      int64_t t = std::chrono::duration_cast<std::chrono::microseconds>(
+          std::chrono::system_clock::now().time_since_epoch()).count();
+      return t;
+    }
+};
 } // end namespace MapLocalization
-#endif // end MAP_LOCALIZATION_UTILITY_H
+#endif // end MAP_LOCALIZATION_COMMON_UTILITY_H

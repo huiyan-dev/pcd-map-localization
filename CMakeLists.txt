@@ -70,15 +70,23 @@ link_directories(
 	${PCL_LIBRARY_DIRS}
 )
 ################################################
+##            map localization library        ##
+################################################
+set(SOURCE_LIST
+  src/map_helper.cc
+  src/map_localizing.cc
+)
+add_library(map_localization SHARED ${SOURCE_LIST})
+################################################
 ## Declare lio_sam_map_localization nodes     ##
 ################################################
 
-add_executable(${PROJECT_NAME}_mapHelper src/map_helper.cc)
-target_link_libraries(${PROJECT_NAME}_mapHelper ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+add_executable(${PROJECT_NAME}_mapHelper src/nodes/node_map_helper.cc)
+target_link_libraries(${PROJECT_NAME}_mapHelper ${catkin_LIBRARIES} ${PCL_LIBRARIES} map_localization)
 target_include_directories(${PROJECT_NAME}_mapHelper PRIVATE ${PROJECT_SOURCE_DIR}/include ${catkin_INCLUDE_DIRS})
 
-add_executable(${PROJECT_NAME}_mapLocalizing src/map_localizing.cc)
-target_link_libraries(${PROJECT_NAME}_mapLocalizing ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+add_executable(${PROJECT_NAME}_mapLocalizing src/nodes/node_map_localizing.cc)
+target_link_libraries(${PROJECT_NAME}_mapLocalizing ${catkin_LIBRARIES} ${PCL_LIBRARIES} map_localization)
 target_include_directories(${PROJECT_NAME}_mapLocalizing PRIVATE ${PROJECT_SOURCE_DIR}/include ${catkin_INCLUDE_DIRS})
 
 #############
