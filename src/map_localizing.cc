@@ -264,7 +264,6 @@ void MapLocalizing::localizing() {
 void MapLocalizing::visualize_global_map_thread_func() {
   ros::Rate rate(0.1);
   while(ros::ok()) {
-    rate.sleep();
     std_msgs::Header header;
     header.stamp = ros::Time::now();
     header.frame_id = world_coordinate_name;
@@ -273,6 +272,7 @@ void MapLocalizing::visualize_global_map_thread_func() {
     PublishPointCloud2(global_map_ds_pub, *global_map_ds_ptr, header);
     // global ground truth trajectory
     PublishPointCloud2(global_gt_trajectory_pub, *global_gt_trajectory_ptr, header);
+    rate.sleep();
   }
 }
 

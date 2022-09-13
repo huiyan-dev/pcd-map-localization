@@ -28,7 +28,7 @@ public:
   void allocate_memory();
   void reset_system();
   void global_map_handle(const sensor_msgs::PointCloud2::Ptr &msg_in);
-  void  global_gt_transformations_handle(const sensor_msgs::PointCloud2::Ptr &msg_in);
+  void global_gt_transformations_handle(const sensor_msgs::PointCloud2::Ptr &msg_in);
   void global_gt_trajectory_handle(const sensor_msgs::PointCloud2::Ptr &msg_in) const;
   void point_cloud_handle(const sensor_msgs::PointCloud2::Ptr &msg_in);
   void down_sample_deskewed();

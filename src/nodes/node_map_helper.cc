@@ -34,7 +34,7 @@ int main(int argc, char **argv){
     PublishPointCloud2(map_helper.global_gt_transforms_pub, *map_helper.global_gt_transformations, header, map_helper.global_gt_transformations_topic, bag_out);
   }
   
-  // simulate ros pcd message publi sher with 10 Hz
+  // simulate ros pcd message publisher with 10 Hz
   ros::Rate pub_rate(10);
   const vector<string> &corner_splits = map_helper.global_corner_splits;
   const vector<string> &surf_splits = map_helper.global_surf_splits;
