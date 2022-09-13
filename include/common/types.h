@@ -1,5 +1,5 @@
-#ifndef MAP_LOCALIZATION_TYPES_H
-#define MAP_LOCALIZATION_TYPES_H
+#ifndef MAP_LOCALIZATION_COMMON_TYPES_H
+#define MAP_LOCALIZATION_COMMON_TYPES_H
 
 #include <pcl/point_types.h>
 
@@ -38,4 +38,4 @@ POINT_CLOUD_REGISTER_POINT_STRUCT (PointXYZIRPYT,
 typedef PointXYZIRPYT  PointTypePose;
 typedef pcl::PointXYZI PointType;
 
-#endif // end MAP_LOCALIZATION_TYPES_H
+#endif // end MAP_LOCALIZATION_COMMON_TYPES_H

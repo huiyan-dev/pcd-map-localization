@@ -1,12 +1,19 @@
 pcd_map_localization:
-  # LoadPCD is true which just read global map in your given path or false subscrible from rosbag Topic. 
+  # Use for global map down sample
+  localizingGlobalMapLeafSize: 1.0
+  localizingDeskewedLeafSize: 2.0
+  globalMapDsSearchRadius: 100
+  ndtResolution: 1.2
+  ndtMaxIterations: 1000
+  ndtRotationEpsilon: 0.00001
+  # Read global map in given path or subscrible from rosbag Topic.
   toRosBag: true                               # if true save message to rosbag
-  savedPCDDirectory: "/Datasets/PCDMap/lio_sam/"        # start at your home folder: /home/${user}/, starts and ends with "/".
+  savedPCDDirectory: "/Datasets/PCDMap/lio_sam_walking/"        # start at your home folder: /home/${user}/, starts and ends with "/".
   savedCornerMapDirectory: "corner/" # savePCDDirectory + saveCornerMapDirectory, start ""
   savedSurfMapDirectory: "surf/" # savePCDDirectory + saveSurfrMapDirectory, start ""
   savedDeskewedPointcloudDirectory: "input_data/" # savePCDDirectory + saveSurfrMapDirectory, start ""
   
-  # If loadPCD is false than subscrible these topics to load priority map.
+  # If loadPCD is false, subscrible these topics to load priority map.
   # NOTE: This .pcd format map can generate by lio_sam or others methods.
   #       Localization based on a priority map means we daopt global map as absolute reference.
   #       Ground truth (GT) of trajectory and transform also generate by lio_sam algorithm, also support others.
@@ -27,6 +34,3 @@ pcd_map_localization:
   odometeryCoordinateName: "odometery"
 
   # NOTE: this initial pose is provided by God perspective
-  robotInitPose: [1.0, 0.0, 0.0
-                  0.0, 1.0, 0.0,
-                  0.0, 0.0, 1.0]
